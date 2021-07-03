@@ -1,0 +1,10 @@
+---
+# tasks file for utilities
+- name: Install required packages  (state=present is optional)
+  apt:
+    name: "{{ item }}" 
+    state: present
+  with_items: "{{ basic_packages }}"
+  register: task_out
+  notify: send_mail
+  become: true

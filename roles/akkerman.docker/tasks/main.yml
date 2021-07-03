@@ -1,0 +1,51 @@
+---
+# tasks file for akkerman.docker
+
+
+- name: pin docker version
+  tags: version_pin
+  template:
+    src: "docker-ce.pref.j2"
+    dest: "/etc/apt/preferences.d/docker-ce.pref"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: install package to allow apt to use repo over https
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+    state: present
+
+- name: add docker apt key
+  apt_key:
+    id: "{{ docker_apt_key_id }}"
+    url: "{{ docker_apt_key_url }}"
+  ignore_errors: true
+
+- name: add docker repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+    state: present
+
+- name: install docker
+  apt:
+    name: docker-ce
+    update_cache: yes
+    cache_valid_time: 600
+    state: present
+
+
+- name: enable docker service
+  systemd:
+    name: docker
+    enabled: yes
+  notify: "restart docker"
+
+- name: add users to docker group
+  user:
+    name: "{{ item }}"
+    groups: docker
+    append: true
+  with_items: "{{ docker_users }}"

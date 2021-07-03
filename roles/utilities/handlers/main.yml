@@ -1,0 +1,12 @@
+---
+# handlers file for utilities
+- name: send_mail 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: mohini4conf@gmail.com
+    password: "{{ mail_password }}" 
+    to: Laptop <mohini4conf@gmail.com>
+    subject: Ansible Report
+    body: System {{ ansible_hostname }} has been successfully provisioned.{{ task_out }}
+  delegate_to: localhost

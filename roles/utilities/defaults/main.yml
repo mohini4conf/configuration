@@ -1,0 +1,8 @@
+---
+# defaults file for utilities
+basic_packages:
+- tree 
+- openjdk-8-jdk 
+- cowsay 
+- git
+- maven

@@ -1,0 +1,64 @@
+---
+dependency:
+  name: galaxy
+lint:
+  name: yamllint
+driver:
+  name: vagrant
+  provider:
+    name: virtualbox
+platforms:
+  - name: xenial
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    config_options:
+      synced_folder: true
+    box: bento/ubuntu-16.04
+    memory: 1024
+    cpus: 1
+    provider_options:
+      gui: false
+    provider_raw_config_args:
+      - "customize ['modifyvm', :id, '--cpuexecutioncap', '50']"
+    provider_override_args:
+      - "vm.synced_folder './', '/vagrant', disabled: true, type: 'nfs'"
+    provision: true
+  - name: bionic
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    config_options:
+      synced_folder: true
+    box: bento/ubuntu-18.04
+    memory: 1024
+    cpus: 1
+    provider_options:
+      gui: false
+    provider_raw_config_args:
+      - "customize ['modifyvm', :id, '--cpuexecutioncap', '50']"
+    provider_override_args:
+      - "vm.synced_folder './', '/vagrant', disabled: true, type: 'nfs'"
+    provision: true
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
+scenario:
+  name: default
+  test_sequence:
+    - lint
+    - destroy
+    - syntax
+    - create
+    - converge
+    - idempotence
+    - check
+    - verify
+    - destroy

@@ -1,0 +1,4 @@
+
+Command To Run Playbook
+==============================================================================
+ansible-playbook -i local -e @.secrets.yaml --ask-vault-pass site.yaml -K

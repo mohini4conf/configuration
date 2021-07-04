@@ -6,3 +6,4 @@ basic_packages:
 - cowsay 
 - git
 - maven
+- locate

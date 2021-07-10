@@ -11,6 +11,7 @@ pipeline {
                 // To run Maven on a Windows agent, use
                 // bat "mvn -Dmaven.test.failure.ignore=true clean package"
             }
+        }
             stage('Package') {
             steps {
                 // Get some code from a GitHub repository
@@ -21,6 +22,6 @@ pipeline {
                 // bat "mvn -Dmaven.test.failure.ignore=true clean package"
             }
 
-       }
+        }
     }
 }

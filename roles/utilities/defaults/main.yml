@@ -7,3 +7,4 @@ basic_packages:
 - git
 - maven
 - locate
+- unrar

@@ -1,2 +1,4 @@
 [local-machine]
 localhost
+[jenkins-slave]
+172.17.0.2

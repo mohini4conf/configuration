@@ -3,7 +3,8 @@
 - hosts: local-machine
   become: true
   roles:
-   - utilities
+   - {role: 'utilities', tags: 'packages'}
    - akkerman.docker
    - git
    - jenkins
+   - alvistack.code

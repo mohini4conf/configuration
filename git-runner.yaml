@@ -1,0 +1,38 @@
+---
+- hosts: local-machine
+  become: yes
+  tasks:
+  - name: Download gitlab script
+    get_url:
+      url: https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh 
+      dest: /home/shri/configuration/install_gitlab.sh
+      mode: 0755
+    tags:
+      - install 
+  - name: Install gitlab repo
+    script: /home/shri/configuration/install_gitlab.sh
+    tags:
+      - install
+  - name: Install gitlab
+    apt:
+      name: gitlab-ce=14.1.0-ce.0
+      state: present 
+    tags:
+      - installapt
+  - name: To download GitLab Runner
+    get_url:
+      url: https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64
+      dest: /usr/local/bin/gitlab-runner
+      mode: 0755
+  - name: Check if runner exists
+    stat:
+      path: /etc/systemd/system/gitlab-runner.service 
+    register: gitlab_runner_exists
+  - name: Install gitlab Runner
+    shell: gitlab-runner install --user=shri --working-directory=/home/shri/git-runner
+    when: gitlab_runner_exists == False
+  - name: Start Runner
+    shell: gitlab-runner start
+    when: gitlab_runner_exists == False
+  - name: Register Runner
+    shell: gitlab-runner register --url https://gitlab.com/ --registration-token $GIT_LAB_REGISTRATION_TOKEN -n
